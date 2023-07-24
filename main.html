@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Himachal - Police</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <style>
+
+        h2{
+             font-family: Arial;
+        }
+    
+        h4{
+             font-family: Arial;
+        }
+        h5{
+            font-family: Arial;
+        }
+      </style>
+</head>
+<body>
+    <div id="chart"></div>
+    
+   <h2>Himachal Pradesh State Abstract Police and Crime</h2>
+  <h4>No. of police stations in different districts of Himachal</h4>
+  <h5>Updated on 16/08/2022</h5>
+
+   <script>
+    const data = [
+    { category: "Bilaspur", value: 9 },
+    { category: "Chamba", value: 9},
+    { category: "Hamirpur", value: 6 },
+    { category: "Kangra", value: 22 },
+    { category: "Kinnaur", value: 6 },
+    { category: "Kullu", value: 10 },
+    { category: "Lahaul Spiti", value: 3 },
+    { category: "Mandi", value: 14 },
+    { category: "Shimla", value: 20},
+    { category: "Sirmaur", value: 10},
+];
+
+const margin = { top: 30, right: 20, bottom: 40, left: 30 };
+const width = 900 - margin.left - margin.right;
+const height = 550 - margin.top - margin.bottom;
+
+const svg = d3.select("#chart")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+const x = d3.scaleBand()
+    .domain(data.map(d => d.category))
+    .range([0, width])
+    .padding(0.1);
+
+const y = d3.scaleLinear()
+    .domain([0, d3.max(data, d => d.value)])
+    .range([height, 0]);
+
+svg.selectAll(".bar")
+    .data(data)
+    .enter()
+    .append("rect")
+    .attr("class", "bar")
+    .attr("x", d => x(d.category))
+    .attr("y", d => y(d.value))
+    .attr("width", x.bandwidth())
+    .attr("height", d => height - y(d.value))
+    .attr("fill", "navy");
+
+// Add x-axis
+svg.append("g")
+    .attr("transform", `translate(0, ${height})`)
+    .call(d3.axisBottom(x));
+
+// Add y-axis
+svg.append("g")
+    .call(d3.axisLeft(y));
+
+   </script>
+</body>
+</html>
